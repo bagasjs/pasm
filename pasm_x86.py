@@ -18,7 +18,7 @@ AVAILABLE_REGISTERS = {
    "di": 0b111,
 }
 
-def get_register(r: str):
+def get_register_bits(r: str):
     if r[0] == "e":
         r = r[1:]
     return AVAILABLE_REGISTERS[r]
@@ -37,8 +37,8 @@ def modrm(dst: str, src: str, memory = False):
     if memory:
         bits = 0b00
     bits = bits << 6
-    bits = bits | get_register(src) << 3
-    bits = bits | get_register(dst)
+    bits = bits | get_register_bits(src) << 3
+    bits = bits | get_register_bits(dst)
     return bits
 
 def assemble_source(source: str) -> bytes:
@@ -84,7 +84,7 @@ def assemble_source(source: str) -> bytes:
                     break
 
                 if b.isdigit():
-                    binaries.append(0xb8 + get_register(a))
+                    binaries.append(0xb8 + get_register_bits(a))
                     bpacked = int(b)
                     bunpacked = [
                          bpacked & 0xFF,
